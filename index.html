@@ -6,17 +6,34 @@
   <title>Quiz</title>
 </head>
 <body>
-  Hello, Quiz
+  <span>Question</span>
+  <input id="question"/>
+  <span>Answer</span>
+  <input id="answer"/>
+  <button>Add</button>
   <script>
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:8000/data', true);
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        const res = JSON.parse(xhr.responseText);
-        console.log(res);
+    const baseURL = 'http://localhost:8000/';
+
+    const question = document.querySelector('#question');
+    const answer = document.querySelector('#answer');
+    const button = document.querySelector('button');
+    button.onclick = () => {
+      if (!question || !answer) return;
+
+      const xhr = new XMLHttpRequest();
+      const url = baseURL + 'data';
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 201) {
+          const res = JSON.parse(xhr.responseText);
+          console.log(res);
+          question.value = '';
+          answer.value = '';
+        }
       }
+      xhr.send(JSON.stringify({ question: question.value, answer: answer.value }));
     }
-    xhr.send();
   </script>
 </body>
 </html>

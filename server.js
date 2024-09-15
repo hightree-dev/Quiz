@@ -12,11 +12,24 @@ const server = http.createServer((req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/html' });
       res.end(html);
     });    
-  }
-  else if (req.url === '/data') {
+  } else if (req.url === '/data') {
     if (req.method === 'GET') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ data: 'Data' }));
+    } else if (req.method === 'POST') {
+      let body = '';
+      req.on('data', chunk => { body += chunk; });
+      req.on('end', () => {
+        console.log('Received POST data', body);
+        try {
+          const parsedData = JSON.parse(body);
+          console.log('Parsed data: ', parsedData);
+        } catch(e) {
+          console.error('Failed to parse JSON: ', e);
+        }
+        res.writeHead(201, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'Data received successfully' }));
+      });
     }
   }
 });
