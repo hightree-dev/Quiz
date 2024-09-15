@@ -13,6 +13,12 @@ const server = http.createServer((req, res) => {
       res.end(html);
     });    
   }
+  else if (req.url === '/data') {
+    if (req.method === 'GET') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ data: 'Data' }));
+    }
+  }
 });
 
 const port = 8000;

@@ -6,6 +6,17 @@
   <title>Quiz</title>
 </head>
 <body>
-  Hello, Quiz.
+  Hello, Quiz
+  <script>
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://localhost:8000/data', true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        const res = JSON.parse(xhr.responseText);
+        console.log(res);
+      }
+    }
+    xhr.send();
+  </script>
 </body>
 </html>
