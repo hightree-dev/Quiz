@@ -10,18 +10,28 @@
   <input id="question"/>
   <span>Answer</span>
   <input id="answer"/>
-  <button>Add</button>
+  <button id="add">Add</button>
+  <button id="getAll">Get All</button>
+  <button id="getLast">Get Last</button>
+  <input id="id"/>
+  <button id="get">Get</button>
   <script>
     const baseURL = 'http://localhost:8000/';
 
     const question = document.querySelector('#question');
     const answer = document.querySelector('#answer');
-    const button = document.querySelector('button');
-    button.onclick = () => {
+    const addButton = document.querySelector('#add');
+    const getAllButton = document.querySelector('#getAll');
+    const getLastButton = document.querySelector('#getLast');
+    const id = document.querySelector('#id');
+    const getButton = document.querySelector('#get');
+    
+
+    addButton.onclick = () => {
       if (!question || !answer) return;
 
       const xhr = new XMLHttpRequest();
-      const url = baseURL + 'data';
+      const url = baseURL + 'quiz';
       xhr.open('POST', url, true);
       xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
       xhr.onreadystatechange = () => {
@@ -33,6 +43,48 @@
         }
       }
       xhr.send(JSON.stringify({ question: question.value, answer: answer.value }));
+    }
+
+    getAllButton.onclick = () => {
+      const xhr = new XMLHttpRequest();
+      const url = baseURL + 'quizzes';
+      xhr.open('GET', url, true);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          const res = JSON.parse(xhr.responseText);
+          console.log(res);
+        }
+      }
+      xhr.send();
+    }
+
+    getLastButton.onclick = () => {
+      const xhr = new XMLHttpRequest();
+      const url = baseURL + 'quiz/-1';
+      xhr.open('GET', url, true);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          const res = JSON.parse(xhr.responseText);
+          console.log(res);
+        }
+      }
+      xhr.send();
+    }
+
+    getButton.onclick = () => {
+      if (!id.value || !parseInt(id.value))
+        return;
+
+      const xhr = new XMLHttpRequest();
+      const url = baseURL + 'quiz/' + id.value;
+      xhr.open('GET', url, true);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          const res = JSON.parse(xhr.responseText);
+          console.log(res);
+        }
+      }
+      xhr.send();
     }
   </script>
 </body>
